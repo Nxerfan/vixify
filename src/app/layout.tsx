@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://vixify.vercel.app"),
   title: "Vixify — OTP API for developers, sent via real SIM cards",
   description:
-    "Vixify turns any Android phone into an SMS gateway. Generate OTP codes, verify users, and pay zero per-message carrier fees. Sub-300ms API, signed webhooks, and the @nixify/sms SDK.",
+    "Vixify is a managed OTP service. Integrate the API, send OTPs to your users from our real-SIM gateway, and pay only for what you send — no hardware, no carrier contracts. Sub-300ms API, signed webhooks, and the @nixify/sms SDK.",
   keywords: [
     "Vixify",
     "OTP API",
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     icon: "/logo.svg",
   },
   openGraph: {
-    title: "Vixify — OTP API via real SIM cards",
+    title: "Vixify — Managed OTP API for developers",
     description:
-      "OTP API for developers, sent via real SIM cards. Sub-300ms, signed webhooks, @nixify/sms SDK.",
+      "Vixify is a managed OTP service. Integrate the API, send OTPs from our real-SIM gateway, and pay per OTP — no hardware required. Sub-300ms, signed webhooks, @nixify/sms SDK.",
     url: "https://vixify.vercel.app",
     siteName: "Vixify",
     type: "website",
@@ -55,9 +55,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vixify — OTP API via real SIM cards",
+    title: "Vixify — Managed OTP API for developers",
     description:
-      "OTP API for developers, sent via real SIM cards. Sub-300ms, signed webhooks, @nixify/sms SDK.",
+      "Managed OTP service: integrate the API, send OTPs from our real-SIM gateway, pay per OTP. No hardware required. Sub-300ms, signed webhooks, @nixify/sms SDK.",
   },
 };
 

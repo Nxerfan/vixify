@@ -33,7 +33,7 @@ export const messages = {
     "hero.title": "OTP API for developers, sent via real SIM cards.",
     "hero.titleAccent": "real SIM cards.",
     "hero.subtitle":
-      "Vixify turns any Android phone into an SMS gateway. Generate codes, verify users, and pay zero per-message carrier fees. Sub-300ms API, signed webhooks, and an SDK that drops into one line.",
+      "Vixify handles all SMS infrastructure for you. Integrate the API, send OTPs to your users, and pay only for what you send — no hardware, no carrier contracts, no per-message markup. Sub-300ms API, signed webhooks, and an SDK that drops into one line.",
     "hero.ctaPrimary": "Start free",
     "hero.ctaSecondary": "View docs",
     "hero.trust": "Free tier · 100 OTPs / month · no card required",
@@ -42,10 +42,10 @@ export const messages = {
     "hero.terminal.response": "200 OK · pending",
     "hero.terminal.codeLabel": "Code",
     "hero.terminal.codeValue": "482913",
-    "hero.terminal.gateway": "→ Android gateway dispatching…",
+    "hero.terminal.gateway": "→ Vixify gateway dispatching…",
     "hero.terminal.sent": "✓ SMS delivered via SIM",
     "hero.terminal.title": "vixify · live request",
-    "hero.phone.label": "Android SIM gateway",
+    "hero.phone.label": "Your user's phone",
 
     // ---- Metrics ----
     "metrics.label": "Trusted in production",
@@ -77,8 +77,8 @@ export const messages = {
     "features.3.detail": "HMAC-signed · retries · delivery ledger",
     "features.4.title": "Global SMS",
     "features.4.desc":
-      "Your SIM, your carrier, any country. No third-party provider lock-in and zero per-message markup — the phone in your drawer becomes your infrastructure.",
-    "features.4.detail": "Any carrier · zero markup · no lock-in",
+      "Real SIM delivery to any country, handled entirely by Vixify's managed gateway. No third-party provider routes, no per-message markup, and no infrastructure for you to maintain — just call the API.",
+    "features.4.detail": "Managed gateway · zero markup · global reach",
 
     // ---- How it works ----
     "how.kicker": "Three steps",
@@ -93,7 +93,7 @@ export const messages = {
       "Add the official package and initialize a client with your key. Works in Node.js, PHP, and Python — plus raw REST anywhere.",
     "how.step3.title": "Send an OTP",
     "how.step3.desc":
-      "Call requestOtp with a phone number. Vixify generates the code, your Android gateway dispatches it, webhooks fire on delivery.",
+      "Call requestOtp with a phone number. Vixify generates the code, our managed gateway dispatches it, and webhooks fire on delivery.",
     "how.step1.cmd": "dashboard → API keys",
     "how.step2.cmd": "yarn add @nixify/sms",
     "how.step3.cmd": "client.requestOtp(phone)",
@@ -117,7 +117,8 @@ export const messages = {
     "pricing.kicker": "Pricing",
     "pricing.title": "Start free. Scale when you're ready.",
     "pricing.subtitle":
-      "Five tiers, including pay-as-you-go. No hidden per-message fees — the SIM is yours.",
+      "Five tiers, including pay-as-you-go. A fully managed service — no hardware, no carrier contracts, no per-message markup.",
+    "pricing.managed": "Fully managed — no hardware required",
     "pricing.free.name": "Free",
     "pricing.free.price": "0",
     "pricing.free.period": "/month",
@@ -146,11 +147,11 @@ export const messages = {
     "faq.kicker": "FAQ",
     "faq.title": "Questions, answered.",
     "faq.subtitle":
-      "Everything you need to know about the SIM-based gateway, billing, and the SDK.",
-    "faq.1.q": "How does the Android SMS gateway work?",
-    "faq.1.a": "Vixify doesn't use a traditional SMS provider. When you call /api/request-otp, Vixify generates a 6-digit code, stores it as pending, and returns immediately. An Android phone running a small automation app polls /api/v1/get-pending-sms every 10 seconds, sends the SMS via its own SIM, then confirms with /api/v1/confirm-sent. You get direct carrier delivery with zero per-message fees.",
-    "faq.2.q": "Do I need my own SIM card?",
-    "faq.2.a": "Yes — you provide an Android phone with an active SIM. That's the trade-off for zero per-message costs: the SIM is your infrastructure. Setup guides for MacroDroid and Tasker are included in English and Persian.",
+      "Everything you need to know about the managed OTP service, billing, and the SDK.",
+    "faq.1.q": "How does the Vixify SMS gateway work?",
+    "faq.1.a": "Vixify is a managed OTP service. When you call /api/request-otp, Vixify generates a 6-digit code, stores it as pending, and returns immediately. Vixify's own Android gateway — operated and maintained by us — then dispatches the SMS via its SIM and confirms delivery. You never touch any hardware; you just call the API and pay for the OTPs you send.",
+    "faq.2.q": "Do I need my own SIM card or phone?",
+    "faq.2.a": "No, you don't need any hardware. Vixify handles all SMS sending infrastructure. You just integrate our API/SDK and we send OTPs to your users from our gateway. You only pay for the OTPs you send.",
     "faq.3.q": "What's included in the free tier?",
     "faq.3.a": "100 OTPs per month for one month, one per user, no card required. It's a real trial — full API access, webhooks, and the SDK. Branding customization is reserved for paid tiers.",
     "faq.4.q": "How is billing calculated?",
@@ -158,7 +159,7 @@ export const messages = {
     "faq.5.q": "Can I remove the Vixify signature from SMS?",
     "faq.5.a": "Branding is gated by plan. Free has no branding access. Go can customize text but keeps a non-removable '— Vixify' signature. Pro, Max, and Pay-as-you-go get full access, including signature removal. Segment math (160 GSM-7 / 70 UCS-2) is shown live in the editor.",
     "faq.6.q": "Which countries are supported?",
-    "faq.6.a": "Any country your SIM's carrier can reach. Because delivery happens through your own phone, coverage is determined by your carrier's roaming and international SMS agreements — not by a third-party provider's route map.",
+    "faq.6.a": "Vixify's gateway delivers to any country our carrier's roaming and international SMS agreements cover. Because we operate the SIM infrastructure, you never have to worry about routes or coverage — if a number can receive an SMS, we can reach it. Contact us for specific coverage questions.",
     "faq.7.q": "Is there an official SDK?",
     "faq.7.a": "Yes — @nixify/sms, part of the Nixify family. It's available for Node.js, PHP, and Python, with raw REST endpoints documented for any other language. Initialize with your API key and you're one function call away from a delivered OTP.",
     "faq.8.q": "How do webhooks work?",
@@ -168,7 +169,7 @@ export const messages = {
     "cta.kicker": "Ready when you are",
     "cta.title": "Start sending OTPs in five minutes.",
     "cta.subtitle":
-      "Claim your free API key, install the SDK, and send your first real OTP through a SIM you already own.",
+      "Claim your free API key, install the SDK, and send your first real OTP. We handle all the SMS infrastructure — you just integrate and pay per OTP.",
     "cta.primary": "Get your API key",
     "cta.secondary": "Read the docs",
     "cta.noCard": "No credit card · 100 OTPs free",
@@ -231,7 +232,7 @@ export const messages = {
     "hero.title": "API او‌تی‌پی برای توسعه‌دهندگان، ارسال با سیم‌کارت واقعی.",
     "hero.titleAccent": "سیم‌کارت واقعی.",
     "hero.subtitle":
-      "Vixify هر گوشی اندرویدی را به دروازه پیامک تبدیل می‌کند. کد بسازید، کاربران را تأیید کنید و هیچ هزینه‌ای به ازای هر پیام نپردازید. API زیر ۳۰۰ میلی‌ثانیه، وب‌هوک‌های امضاشده و SDKی که با یک خط راه می‌افتد.",
+      "Vixify تمام زیرساخت پیامک را برای شما مدیریت می‌کند. API را ادغام کنید، او‌تی‌پی را به کاربران خود بفرستید و فقط برای آنچه می‌فرستید پرداخت کنید — بدون سخت‌افزار، بدون قرارداد مخابراتی، بدون حاشیه‌سود به ازای هر پیام. API زیر ۳۰۰ میلی‌ثانیه، وب‌هوک‌های امضاشده و SDKی که با یک خط راه می‌افتد.",
     "hero.ctaPrimary": "شروع رایگان",
     "hero.ctaSecondary": "مشاهده مستندات",
     "hero.trust": "طرح رایگان · ۱۰۰ او‌تی‌پی در ماه · بدون کارت بانکی",
@@ -240,10 +241,10 @@ export const messages = {
     "hero.terminal.response": "200 OK · در حال انتظار",
     "hero.terminal.codeLabel": "کد",
     "hero.terminal.codeValue": "۴۸۲۹۱۳",
-    "hero.terminal.gateway": "→ در حال ارسال توسط دروازه اندروید…",
+    "hero.terminal.gateway": "→ در حال ارسال توسط دروازه Vixify…",
     "hero.terminal.sent": "✓ پیامک از طریق سیم‌کارت تحویل شد",
     "hero.terminal.title": "vixify · درخواست زنده",
-    "hero.phone.label": "دروازه سیم‌کارت اندروید",
+    "hero.phone.label": "گوشی کاربر شما",
 
     // ---- Metrics ----
     "metrics.label": "مورد اعتماد در محیط عملیاتی",
@@ -275,8 +276,8 @@ export const messages = {
     "features.3.detail": "امضای HMAC · تلاش مجدد · دفتر تحویل",
     "features.4.title": "پیامک جهانی",
     "features.4.desc":
-      "سیم‌کارت شما، مخابرات شما، هر کشوری. بدون وابستگی به ارائه‌دهنده ثالث و بدون حاشیه‌سود به ازای هر پیام — گوشی روی میز شما تبدیل به زیرساخت می‌شود.",
-    "features.4.detail": "هر مخابراتی · بدون حاشیه · بدون وابستگی",
+      "تحویل با سیم‌کارت واقعی به هر کشور، کاملاً توسط دروازه مدیریت‌شده Vixify انجام می‌شود. بدون مسیر ارائه‌دهنده ثالث، بدون حاشیه‌سود به ازای هر پیام، و بدون زیرساختی که شما نگه دارید — فقط API را فراخوانی کنید.",
+    "features.4.detail": "دروازه مدیریت‌شده · بدون حاشیه · دسترسی جهانی",
 
     // ---- How it works ----
     "how.kicker": "سه گام",
@@ -291,7 +292,7 @@ export const messages = {
       "پکیج رسمی را اضافه کنید و یک کلاینت با کلید خود مقداردهی کنید. در Node.js، PHP و Python کار می‌کند — و REST خام در هر زبانی.",
     "how.step3.title": "او‌تی‌پی بفرستید",
     "how.step3.desc":
-      "requestOtp را با شماره تلفن فراخوانی کنید. Vixify کد را تولید می‌کند، دروازه اندروید شما آن را ارسال می‌کند و وب‌هوک‌ها هنگام تحویل اجرا می‌شوند.",
+      "requestOtp را با شماره تلفن فراخوانی کنید. Vixify کد را تولید می‌کند، دروازه مدیریت‌شده ما آن را ارسال می‌کند و وب‌هوک‌ها هنگام تحویل اجرا می‌شوند.",
     "how.step1.cmd": "داشبورد ← کلیدهای API",
     "how.step2.cmd": "yarn add @nixify/sms",
     "how.step3.cmd": "client.requestOtp(phone)",
@@ -315,7 +316,8 @@ export const messages = {
     "pricing.kicker": "قیمت‌گذاری",
     "pricing.title": "رایگان شروع کنید. وقتی آماده بودید، گسترش دهید.",
     "pricing.subtitle":
-      "پنج طرح، شامل پرداخت به‌میزان مصرف. بدون هزینه پنهان به ازای هر پیام — سیم‌کارت مال شماست.",
+      "پنج طرح، شامل پرداخت به‌میزان مصرف. یک سرویس کاملاً مدیریت‌شده — بدون سخت‌افزار، بدون قرارداد مخابراتی، بدون حاشیه‌سود به ازای هر پیام.",
+    "pricing.managed": "کاملاً مدیریت‌شده — بدون نیاز به سخت‌افزار",
     "pricing.free.name": "رایگان",
     "pricing.free.price": "۰",
     "pricing.free.period": "/ماه",
@@ -344,11 +346,11 @@ export const messages = {
     "faq.kicker": "سوالات متداول",
     "faq.title": "سوال‌ها، پاسخ داده شد.",
     "faq.subtitle":
-      "هرآنچه باید درباره دروازه مبتنی بر سیم‌کارت، صورت‌حساب و SDK بدانید.",
-    "faq.1.q": "دروازه پیامک اندروید چگونه کار می‌کند؟",
-    "faq.1.a": "Vixify از ارائه‌دهنده پیامک سنتی استفاده نمی‌کند. هنگام فراخوانی /api/request-otp، Vixify یک کد ۶ رقمی تولید می‌کند، آن را به‌صورت در حال انتظار ذخیره می‌کند و فوراً برمی‌گرداند. یک گوشی اندروید با اپ اتوماسیون کوچک، هر ۱۰ ثانیه /api/v1/get-pending-sms را نظرسنجی می‌کند، پیامک را با سیم‌کارت خودش می‌فرستد و سپس با /api/v1/confirm-sent تأیید می‌کند. تحویل مستقیم مخابراتی با هزینه صفر به ازای هر پیام.",
-    "faq.2.q": "آیا به سیم‌کارت خودم نیاز دارم؟",
-    "faq.2.a": "بله — شما یک گوشی اندروید با سیم‌کارت فعال تأمین می‌کنید. این بهای صفر بودن هزینه هر پیام است: سیم‌کارت، زیرساخت شماست. راهنمای راه‌اندازی برای MacroDroid و Tasker به فارسی و انگلیسی ارائه شده.",
+      "هرآنچه باید درباره سرویس مدیریت‌شده او‌تی‌پی، صورت‌حساب و SDK بدانید.",
+    "faq.1.q": "دروازه پیامک Vixify چگونه کار می‌کند؟",
+    "faq.1.a": "Vixify یک سرویس مدیریت‌شده او‌تی‌پی است. هنگام فراخوانی /api/request-otp، Vixify یک کد ۶ رقمی تولید می‌کند، آن را به‌صورت در حال انتظار ذخیره می‌کند و فوراً برمی‌گرداند. سپس دروازه اندروید خود Vixify — که توسط ما راه‌اندازی و نگهداری می‌شود — پیامک را از طریق سیم‌کارت خود ارسال کرده و تحویل را تأیید می‌کند. شما هرگز با هیچ سخت‌افزاری سروکار ندارید؛ فقط API را فراخوانی کنید و به ازای او‌تی‌پی‌هایی که می‌فرستید پرداخت کنید.",
+    "faq.2.q": "آیا به سیم‌کارت یا گوشی خودم نیاز دارم؟",
+    "faq.2.a": "خیر، به هیچ سخت‌افزاری نیاز ندارید. Vixify تمام زیرساخت ارسال پیامک را مدیریت می‌کند. فقط API/SDK ما را ادغام کنید و ما او‌تی‌پی را از دروازه خود به کاربران شما می‌فرستیم. شما فقط به ازای او‌تی‌پی‌هایی که می‌فرستید پرداخت می‌کنید.",
     "faq.3.q": "طرح رایگان شامل چه چیزی است؟",
     "faq.3.a": "۱۰۰ او‌تی‌پی در ماه به مدت یک ماه، یکی به ازای هر کاربر، بدون کارت بانکی. یک آزمایش واقعی است — دسترسی کامل API، وب‌هوک‌ها و SDK. سفارشی‌سازی برندینگ مختص طرح‌های پولی است.",
     "faq.4.q": "صورت‌حساب چگونه محاسبه می‌شود؟",
@@ -356,7 +358,7 @@ export const messages = {
     "faq.5.q": "آیا می‌توانم امضای Vixify را از پیامک حذف کنم؟",
     "faq.5.a": "برندینگ به طرح بستگی دارد. رایگان دسترسی به برندینگ ندارد. Go می‌تواند متن را سفارشی کند اما امضای غیرقابل‌حذف '— Vixify' را نگه می‌دارد. Pro، Max و پرداخت به‌میزان مصرف دسترسی کامل دارند، شامل حذف امضا. محاسبه بند کد (۱۶۰ GSM-7 / ۷۰ UCS-2) به‌صورت زنده در ویرایشگر نمایش داده می‌شود.",
     "faq.6.q": "کدام کشورها پشتیبانی می‌شوند؟",
-    "faq.6.a": "هر کشوری که مخابرات سیم‌کارت شما به آن دسترسی دارد. از آنجا که تحویل از طریق گوشی خودتان انجام می‌شود، پوشش توسط قراردادهای رومینگ و پیامک بین‌المللی مخابرات شما تعیین می‌شود — نه نقشه مسیر ارائه‌دهنده ثالث.",
+    "faq.6.a": "دروازه Vixify به هر کشوری که قراردادهای رومینگ و پیامک بین‌المللی مخابرات ما پوشش می‌دهد، تحویل می‌دهد. از آنجا که ما زیرساخت سیم‌کارت را عملیاتی می‌کنیم، هرگز نگران مسیرها یا پوشش نیستید — اگر شماره‌ای بتواند پیامک دریافت کند، ما به آن می‌رسیم. برای سوالات خاص پوشش با ما تماس بگیرید.",
     "faq.7.q": "آیا SDK رسمی وجود دارد؟",
     "faq.7.a": "بله — @nixify/sms، بخشی از خانواده Nixify. برای Node.js، PHP و Python در دسترس است، با endpointهای REST خام برای هر زبان دیگر. با کلید API مقداردهی کنید و یک فراخوانی تابع تا تحویل او‌تی‌پی فاصله دارید.",
     "faq.8.q": "وب‌هوک‌ها چگونه کار می‌کنند؟",
@@ -366,7 +368,7 @@ export const messages = {
     "cta.kicker": "هر زمان آماده بودید",
     "cta.title": "در پنج دقیقه شروع به ارسال او‌تی‌پی کنید.",
     "cta.subtitle":
-      "کلید API رایگان خود را بگیرید، SDK را نصب کنید و اولین او‌تی‌پی واقعی را از طریق سیم‌کاری که از قبل دارید بفرستید.",
+      "کلید API رایگان خود را بگیرید، SDK را نصب کنید و اولین او‌تی‌پی واقعی را بفرستید. ما تمام زیرساخت پیامک را مدیریت می‌کنیم — شما فقط ادغام کنید و به ازای هر او‌تی‌پی پرداخت کنید.",
     "cta.primary": "دریافت کلید API",
     "cta.secondary": "خواندن مستندات",
     "cta.noCard": "بدون کارت بانکی · ۱۰۰ او‌تی‌پی رایگان",

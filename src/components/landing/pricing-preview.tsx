@@ -41,6 +41,26 @@ export function PricingPreview() {
           align="center"
         />
 
+        <div className="mt-6 flex justify-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold-soft px-4 py-1.5 text-xs font-medium text-gold">
+            <svg
+              className="h-3.5 w-3.5"
+              viewBox="0 0 20 20"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M5 10l3.5 3.5L15 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            {t("pricing.managed")}
+          </span>
+        </div>
+
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {TIERS.map((tier, i) => (
             <motion.div
