@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VixifyLogo } from "@/components/brand/vixify-logo";
@@ -10,15 +11,16 @@ import { useLocale } from "@/i18n/locale-context";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { key: "nav.features", href: "#features" },
-  { key: "nav.howItWorks", href: "#how-it-works" },
-  { key: "nav.pricing", href: "#pricing" },
-  { key: "nav.docs", href: "#docs" },
-  { key: "nav.faq", href: "#faq" },
+  { key: "nav.pricing", href: "/pricing" },
+  { key: "nav.docs", href: "/docs" },
+  { key: "nav.blog", href: "/blog" },
+  { key: "nav.about", href: "/about" },
+  { key: "nav.contact", href: "/contact" },
 ] as const;
 
 export function Header() {
   const { t } = useLocale();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -36,6 +38,9 @@ export function Header() {
     };
   }, [mobileOpen]);
 
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
   return (
     <header
       className={cn(
@@ -47,20 +52,25 @@ export function Header() {
     >
       <div className="container-edge flex h-16 items-center justify-between gap-4">
         <a
-          href="#top"
+          href="/"
           aria-label={t("a11y.logo")}
           className="flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <VixifyLogo size={34} />
         </a>
 
-        {/* desktop nav */}
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.key}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={cn(
+                "rounded-md px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                isActive(item.href)
+                  ? "text-gold"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
             >
               {t(item.key)}
             </a>
@@ -71,14 +81,16 @@ export function Header() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
           <ThemeToggle />
           <a
-            href="#cta"
+            href="/pricing"
             className="group hidden items-center gap-1.5 rounded-xl bg-gold px-4 py-2 text-sm font-semibold text-gold-foreground transition-all hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
           >
             {t("nav.getStarted")}
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.25} />
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              strokeWidth={2.25}
+            />
           </a>
 
-          {/* mobile menu trigger */}
           <button
             type="button"
             aria-label={t("a11y.openMenu")}
@@ -91,7 +103,6 @@ export function Header() {
         </div>
       </div>
 
-      {/* mobile sheet */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -131,7 +142,13 @@ export function Header() {
                     key={item.key}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    className="rounded-lg px-3 py-3 text-base text-foreground/90 transition-colors hover:bg-secondary hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cn(
+                      "rounded-lg px-3 py-3 text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      isActive(item.href)
+                        ? "bg-secondary text-gold"
+                        : "text-foreground/90 hover:bg-secondary hover:text-gold"
+                    )}
                   >
                     {t(item.key)}
                   </a>
@@ -144,7 +161,7 @@ export function Header() {
               </div>
 
               <a
-                href="#cta"
+                href="/pricing"
                 onClick={() => setMobileOpen(false)}
                 className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gold px-4 py-3 text-sm font-semibold text-gold-foreground transition-all hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >

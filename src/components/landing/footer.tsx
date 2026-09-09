@@ -22,35 +22,32 @@ const COLUMNS = [
   {
     titleKey: "footer.product",
     links: [
-      { labelKey: "footer.product.features", href: "#features" },
-      { labelKey: "footer.product.pricing", href: "#pricing" },
-      { labelKey: "footer.product.dashboard", href: "#cta" },
-      { labelKey: "footer.product.changelog", href: "#" },
+      { labelKey: "footer.product.pricing", href: "/pricing" },
+      { labelKey: "footer.product.changelog", href: "/changelog" },
+      { labelKey: "footer.product.status", href: "/status" },
     ],
   },
   {
     titleKey: "footer.developers",
     links: [
-      { labelKey: "footer.developers.docs", href: "#docs" },
-      { labelKey: "footer.developers.sdk", href: "#docs" },
-      { labelKey: "footer.developers.api", href: "#docs" },
-      { labelKey: "footer.developers.status", href: "#" },
+      { labelKey: "footer.developers.docs", href: "/docs" },
+      { labelKey: "footer.developers.sdk", href: "/docs" },
+      { labelKey: "footer.developers.api", href: "/docs" },
     ],
   },
   {
     titleKey: "footer.company",
     links: [
-      { labelKey: "footer.company.about", href: "#" },
-      { labelKey: "footer.company.contact", href: "#contact" },
-      { labelKey: "footer.company.blog", href: "#" },
+      { labelKey: "footer.company.about", href: "/about" },
+      { labelKey: "footer.company.contact", href: "/contact" },
+      { labelKey: "footer.company.blog", href: "/blog" },
     ],
   },
   {
     titleKey: "footer.legal",
     links: [
-      { labelKey: "footer.legal.privacy", href: "#" },
-      { labelKey: "footer.legal.terms", href: "#" },
-      { labelKey: "footer.legal.security", href: "#" },
+      { labelKey: "footer.legal.privacy", href: "/privacy" },
+      { labelKey: "footer.legal.terms", href: "/terms" },
     ],
   },
 ] as const;
@@ -63,14 +60,15 @@ export function Footer() {
     <footer className="relative mt-auto border-t border-border bg-card/40">
       <div className="container-edge py-14 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_2fr]">
-          {/* brand + contact */}
           <div>
-            <VixifyLogo size={36} />
+            <a href="/" aria-label={t("a11y.logo")}>
+              <VixifyLogo size={36} />
+            </a>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
               {t("footer.tagline")}
             </p>
 
-            <div id="contact" className="mt-6 grid gap-2.5">
+            <div className="mt-6 grid gap-2.5">
               <a
                 href={`mailto:${CONTACT.email}`}
                 className="inline-flex items-center gap-2.5 text-sm text-muted-foreground transition-colors hover:text-gold"
@@ -84,7 +82,9 @@ export function Footer() {
               >
                 <Phone className="h-4 w-4 text-gold" strokeWidth={1.75} />
                 <span dir="ltr">{CONTACT.phone}</span>
-                <span className="text-xs text-muted-foreground/70">({t("footer.contact.phone")})</span>
+                <span className="text-xs text-muted-foreground/70">
+                  ({t("footer.contact.phone")})
+                </span>
               </a>
             </div>
 
@@ -104,7 +104,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* link columns */}
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {COLUMNS.map((col) => (
               <div key={col.titleKey}>

@@ -73,7 +73,7 @@ export function Hero() {
               className="mt-7 flex flex-wrap items-center gap-3"
             >
               <MagneticButton
-                href="#cta"
+                href="/pricing"
                 className="group bg-gold text-gold-foreground shadow-[0_8px_30px_-8px_color-mix(in_oklch,var(--gold)_60%,transparent)] hover:brightness-105"
               >
                 {t("hero.ctaPrimary")}
@@ -83,7 +83,7 @@ export function Hero() {
                 />
               </MagneticButton>
               <MagneticButton
-                href="#docs"
+                href="/docs"
                 strength={0.2}
                 className="border border-border bg-card/50 text-foreground backdrop-blur hover:border-gold/40 hover:text-gold"
               >

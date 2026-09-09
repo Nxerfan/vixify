@@ -63,7 +63,7 @@ export function FinalCta() {
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <MagneticButton
-                href="#top"
+                href="/pricing"
                 className="group bg-gold text-gold-foreground shadow-[0_10px_40px_-10px_color-mix(in_oklch,var(--gold)_70%,transparent)] hover:brightness-105"
               >
                 <VixifyMark size={18} />
@@ -74,7 +74,7 @@ export function FinalCta() {
                 />
               </MagneticButton>
               <MagneticButton
-                href="#docs"
+                href="/docs"
                 strength={0.2}
                 className="border border-border bg-background/50 text-foreground backdrop-blur hover:border-gold/40 hover:text-gold"
               >

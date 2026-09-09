@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { LocaleProvider } from "@/i18n/locale-context";
+import { Header } from "@/components/landing/header";
+import { Footer } from "@/components/landing/footer";
+import { ScrollProgress } from "@/components/landing/scroll-progress";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
@@ -73,7 +76,20 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <LocaleProvider>
-            {children}
+            <ScrollProgress />
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-gold focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-gold-foreground"
+            >
+              Skip to content
+            </a>
+            <div className="relative flex min-h-screen flex-col bg-background grain">
+              <Header />
+              <main id="main" className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
             <Toaster />
           </LocaleProvider>
         </ThemeProvider>
