@@ -1,0 +1,215 @@
+/* Hero terminal + phone visualization */
+.terminal {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--card) 92%, var(--gold) 4%) 0%,
+    var(--card) 60%
+  );
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 color-mix(in oklch, var(--gold) 22%, transparent) inset,
+    0 30px 60px -20px rgba(0, 0, 0, 0.5),
+    0 0 0 1px color-mix(in oklch, var(--gold) 8%, transparent);
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklch, var(--background) 50%, transparent);
+}
+
+.terminalDots {
+  display: flex;
+  gap: 0.4rem;
+}
+.dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 9999px;
+  background: var(--border);
+}
+.dot:nth-child(1) { background: oklch(0.7 0.2 25); }
+.dot:nth-child(2) { background: oklch(0.78 0.16 70); }
+.dot:nth-child(3) { background: oklch(0.72 0.16 150); }
+
+.terminalTitle {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  letter-spacing: 0.04em;
+}
+
+.terminalBody {
+  padding: 1rem 1.1rem 1.2rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.prompt { color: var(--gold); user-select: none; }
+.method {
+  color: color-mix(in oklch, var(--gold) 88%, green 12%);
+  font-weight: 600;
+}
+.path { color: var(--foreground); }
+.ok {
+  color: oklch(0.78 0.16 150);
+  font-weight: 600;
+}
+.muted { color: var(--muted-foreground); }
+.payload { color: color-mix(in oklch, var(--foreground) 80%, transparent); }
+.codeTag { color: var(--gold); }
+
+.codeBox {
+  margin-top: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px dashed color-mix(in oklch, var(--gold) 40%, transparent);
+  border-radius: 10px;
+  background: color-mix(in oklch, var(--gold) 7%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.codeDigits {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-shadow: 0 0 24px color-mix(in oklch, var(--gold) 45%, transparent);
+}
+
+.gateway {
+  margin-top: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.76rem;
+}
+
+.gatewayDot {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--gold);
+}
+.gatewayDot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  border: 1px solid var(--gold);
+  animation: vixify-pulse-ring 2.4s ease-out infinite;
+}
+
+.sent {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: oklch(0.82 0.15 150);
+  font-weight: 600;
+}
+
+/* phone card */
+.phone {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: linear-gradient(160deg, var(--card) 0%, color-mix(in oklch, var(--card) 88%, var(--background)) 100%);
+  padding: 0.9rem;
+  box-shadow:
+    0 20px 50px -18px rgba(0, 0, 0, 0.55),
+    0 0 0 1px color-mix(in oklch, var(--gold) 6%, transparent);
+}
+
+.phoneScreen {
+  border-radius: 14px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 1rem 0.9rem;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.phoneSender {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-jetbrains-mono), monospace;
+  letter-spacing: 0.05em;
+}
+
+.phoneMsgBody {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.phoneCode {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.25em;
+}
+
+.phoneFooter {
+  margin-top: auto;
+  font-size: 0.66rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+/* signal line between phone and terminal */
+.signal {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroGlow {
+  position: absolute;
+  inset: -10% -5% auto -5%;
+  height: 60%;
+  background: radial-gradient(
+    60% 80% at 50% 0%,
+    color-mix(in oklch, var(--gold) 16%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gridBg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, black 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, black 0%, transparent 75%);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}

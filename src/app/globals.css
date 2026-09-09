@@ -3,11 +3,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   Vixify Design Tokens — Editorial Noir × Gold Craft
+   ============================================================ */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter-tight);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-fa: var(--font-vazirmatn);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,86 +42,277 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-gold-soft: var(--gold-soft);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
 }
 
+/* ---- Dark theme (primary) ---- */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.75rem;
+
+  /* Warm near-black base */
+  --background: oklch(0.155 0.004 75);
+  --foreground: oklch(0.965 0.006 75);
+  --card: oklch(0.195 0.005 75);
+  --card-foreground: oklch(0.965 0.006 75);
+  --popover: oklch(0.18 0.005 75);
+  --popover-foreground: oklch(0.965 0.006 75);
+  --primary: oklch(0.965 0.006 75);
+  --primary-foreground: oklch(0.155 0.004 75);
+  --secondary: oklch(0.245 0.005 75);
+  --secondary-foreground: oklch(0.965 0.006 75);
+  --muted: oklch(0.245 0.005 75);
+  --muted-foreground: oklch(0.68 0.008 75);
+  --accent: oklch(0.245 0.005 75);
+  --accent-foreground: oklch(0.965 0.006 75);
+  --destructive: oklch(0.68 0.21 25);
+  --border: oklch(0.965 0.006 75 / 0.10);
+  --input: oklch(0.965 0.006 75 / 0.14);
+  --ring: var(--gold);
+
+  /* Brand gold #FFDD6F */
+  --gold: oklch(0.88 0.135 86);
+  --gold-foreground: oklch(0.22 0.03 75);
+  --gold-soft: oklch(0.88 0.135 86 / 0.14);
+
+  --chart-1: oklch(0.88 0.135 86);
+  --chart-2: oklch(0.72 0.13 160);
+  --chart-3: oklch(0.65 0.18 250);
+  --chart-4: oklch(0.78 0.16 50);
+  --chart-5: oklch(0.7 0.2 15);
+
+  --sidebar: oklch(0.18 0.005 75);
+  --sidebar-foreground: oklch(0.965 0.006 75);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: oklch(0.22 0.03 75);
+  --sidebar-accent: oklch(0.245 0.005 75);
+  --sidebar-accent-foreground: oklch(0.965 0.006 75);
+  --sidebar-border: oklch(0.965 0.006 75 / 0.10);
+  --sidebar-ring: var(--gold);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+/* ---- Light theme ---- */
+.light {
+  --background: oklch(0.985 0.004 75);
+  --foreground: oklch(0.2 0.006 75);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.006 75);
+  --popover: oklch(0.995 0.003 75);
+  --popover-foreground: oklch(0.2 0.006 75);
+  --primary: oklch(0.2 0.006 75);
+  --primary-foreground: oklch(0.985 0.004 75);
+  --secondary: oklch(0.965 0.005 75);
+  --secondary-foreground: oklch(0.2 0.006 75);
+  --muted: oklch(0.965 0.005 75);
+  --muted-foreground: oklch(0.5 0.008 75);
+  --accent: oklch(0.965 0.005 75);
+  --accent-foreground: oklch(0.2 0.006 75);
+  --destructive: oklch(0.58 0.24 27);
+  --border: oklch(0.2 0.006 75 / 0.12);
+  --input: oklch(0.2 0.006 75 / 0.14);
+  --ring: var(--gold-strong);
+
+  /* Gold reads weaker on white, keep #FFDD6F for fills, deepen for text */
+  --gold: oklch(0.83 0.15 84);
+  --gold-foreground: oklch(0.22 0.03 75);
+  --gold-soft: oklch(0.83 0.15 84 / 0.16);
+
+  --chart-1: oklch(0.75 0.15 80);
+  --chart-2: oklch(0.62 0.13 160);
+  --chart-3: oklch(0.55 0.18 250);
+  --chart-4: oklch(0.7 0.16 50);
+  --chart-5: oklch(0.62 0.2 15);
+
+  --sidebar: oklch(0.99 0.003 75);
+  --sidebar-foreground: oklch(0.2 0.006 75);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: oklch(0.22 0.03 75);
+  --sidebar-accent: oklch(0.965 0.005 75);
+  --sidebar-accent-foreground: oklch(0.2 0.006 75);
+  --sidebar-border: oklch(0.2 0.006 75 / 0.12);
+  --sidebar-ring: var(--gold);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11", "calt";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Persian typography */
+  [dir="rtl"] {
+    font-family: var(--font-fa), var(--font-inter-tight), sans-serif;
+  }
+  [dir="rtl"] .font-mono {
+    font-family: var(--font-jetbrains-mono), var(--font-fa), monospace;
+  }
+  ::selection {
+    background: var(--gold);
+    color: var(--gold-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
+
+/* ============================================================
+   Vixify utilities
+   ============================================================ */
+
+@layer utilities {
+  .text-gold {
+    color: var(--gold);
+  }
+  .bg-gold {
+    background-color: var(--gold);
+  }
+  .border-gold {
+    border-color: var(--gold);
+  }
+
+  /* Glassmorphic surface */
+  .glass {
+    background: color-mix(in oklch, var(--card) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid var(--border);
+  }
+
+  /* Hairline gold border */
+  .ring-gold-soft {
+    box-shadow: inset 0 0 0 1px var(--gold-soft);
+  }
+
+  /* Gold text gradient */
+  .text-gradient-gold {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--gold) 100%, white 18%) 0%,
+      var(--gold) 55%,
+      color-mix(in oklch, var(--gold) 78%, #8a6d1f 22%) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Noise grain overlay */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container-edge {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-edge { padding-inline: 2rem; }
+  }
+  @media (min-width: 1280px) {
+    .container-edge { padding-inline: 2.5rem; }
+  }
+
+  /* Mono label kicker */
+  .kicker {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* ============================================================
+   Keyframes
+   ============================================================ */
+
+@keyframes vixify-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+[dir="rtl"] .vixify-marquee-track {
+  animation-direction: reverse;
+}
+.vixify-marquee-track {
+  animation: vixify-marquee 38s linear infinite;
+}
+
+@keyframes vixify-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.vixify-caret {
+  animation: vixify-blink 1.05s steps(1) infinite;
+}
+
+@keyframes vixify-pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { opacity: 0; }
+}
+.vixify-pulse-ring {
+  animation: vixify-pulse-ring 2.4s ease-out infinite;
+}
+
+@keyframes vixify-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.vixify-float { animation: vixify-float 6s ease-in-out infinite; }
+
+@keyframes vixify-signal {
+  0% { stroke-dashoffset: 40; opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0.2; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .vixify-marquee-track { animation: none !important; }
+}
+
+/* Custom scrollbar */
+.vixify-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.vixify-scroll::-webkit-scrollbar-track { background: transparent; }
+.vixify-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+.vixify-scroll::-webkit-scrollbar-thumb:hover { background: var(--gold-soft); }

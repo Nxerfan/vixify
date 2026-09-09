@@ -1,0 +1,85 @@
+/* Code example block */
+.codeblock {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 color-mix(in oklch, var(--gold) 14%, transparent) inset,
+    0 24px 50px -24px rgba(0, 0, 0, 0.45);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklch, var(--background) 60%, transparent);
+  overflow-x: auto;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.tab:hover { color: var(--foreground); }
+.tabActive {
+  color: var(--gold);
+  background: color-mix(in oklch, var(--gold) 10%, transparent);
+}
+
+.copyBtn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.copyBtn:hover {
+  color: var(--gold);
+  border-color: color-mix(in oklch, var(--gold) 40%, transparent);
+}
+.copyBtnDone {
+  color: oklch(0.78 0.16 150);
+  border-color: color-mix(in oklch, oklch(0.78 0.16 150) 40%, transparent);
+}
+
+.pre {
+  margin: 0;
+  padding: 1.1rem 1.2rem 1.3rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  overflow-x: auto;
+  color: var(--foreground);
+  direction: ltr;
+  text-align: left;
+}
+
+.comment { color: var(--muted-foreground); font-style: italic; }
+.keyword { color: oklch(0.78 0.16 70); }
+.string { color: oklch(0.78 0.15 150); }
+.fn { color: oklch(0.82 0.14 250); }
+.var { color: var(--foreground); }
+.const { color: oklch(0.8 0.13 320); }
+.tag { color: var(--gold); }
+.punct { color: var(--muted-foreground); }
