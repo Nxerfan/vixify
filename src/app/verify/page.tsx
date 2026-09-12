@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import {
   Phone,
@@ -29,6 +29,14 @@ interface ApiError {
 }
 
 export default function VerifyPage() {
+  return (
+    <Suspense>
+      <VerifyContent />
+    </Suspense>
+  );
+}
+
+function VerifyContent() {
   const { t, locale } = useLocale();
   const reduceMotion = useReducedMotion();
   const params = useSearchParams();
