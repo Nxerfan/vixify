@@ -36,6 +36,8 @@ model OtpRequest {
   phone       String
   /// HMAC-SHA256(code) using OTP_HASH_SECRET — never the raw code
   codeHash    String
+  /// AES-256-GCM encrypted full SMS message text (for gateway delivery)
+  messageEnc  String
   /// pending | sent | verified | expired | blocked
   status      String    @default("pending")
   /// Wrong-verify attempt counter
@@ -50,6 +52,8 @@ model OtpRequest {
   createdAt   DateTime  @default(now())
   /// 2 minutes after createdAt
   expiresAt   DateTime
+  /// True when generated under SANDBOX_MODE (no real SMS)
+  sandbox     Boolean   @default(false)
 
   @@index([phone, createdAt])
   @@index([status, claimedAt])

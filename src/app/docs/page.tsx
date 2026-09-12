@@ -19,14 +19,11 @@ const TOC_SECTIONS = [
   { id: "tryit", titleKey: "docs.tryit.title" },
 ];
 
-const ERROR_ROWS = [
-  { code: "401", meaningKey: "docs.errors.401", actionKey: "docs.errors.action.401" },
-  { code: "402", meaningKey: "docs.errors.402", actionKey: "docs.errors.action.402" },
-  { code: "403", meaningKey: "docs.errors.403", actionKey: "docs.errors.action.403" },
-  { code: "422", meaningKey: "docs.errors.422", actionKey: "docs.errors.action.422" },
-  { code: "429", meaningKey: "docs.errors.429", actionKey: "docs.errors.action.429" },
-  { code: "500", meaningKey: "docs.errors.500", actionKey: "docs.errors.action.500" },
-];
+const ERROR_CODES = [
+  "INVALID_PHONE", "RATE_LIMITED_COOLDOWN", "RATE_LIMITED_DAILY",
+  "NO_ACTIVE_OTP", "OTP_EXPIRED", "OTP_ALREADY_USED", "OTP_BLOCKED", "INVALID_OTP",
+  "UNAUTHORIZED", "PAYMENT_REQUIRED", "FORBIDDEN", "INTERNAL_ERROR",
+] as const;
 
 const RATE_ROWS = [
   { scopeKey: "docs.ratelimits.row.phone", valKey: "docs.ratelimits.row.phone.val" },
@@ -164,20 +161,22 @@ export default function DocsPage() {
               <section id="errors" className="scroll-mt-24">
                 <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl" style={{ fontFamily: "var(--font-inter-tight)" }}>{t("docs.errors.title")}</h2>
                 <div className="mt-4 overflow-x-auto vixify-scroll">
-                  <table className="w-full min-w-[520px] border-collapse text-sm">
+                  <table className="w-full min-w-[600px] border-collapse text-sm">
                     <thead>
                       <tr className="border-b border-border">
                         <th scope="col" className="py-2.5 pe-3 text-start font-medium text-muted-foreground">{t("docs.errors.table.code")}</th>
+                        <th scope="col" className="py-2.5 px-3 text-start font-medium text-muted-foreground">{t("docs.errors.table.http")}</th>
                         <th scope="col" className="py-2.5 px-3 text-start font-medium text-muted-foreground">{t("docs.errors.table.meaning")}</th>
                         <th scope="col" className="py-2.5 ps-3 text-start font-medium text-muted-foreground">{t("docs.errors.table.action")}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {ERROR_ROWS.map((r) => (
-                        <tr key={r.code} className="border-b border-border/60 align-top">
-                          <td className="py-3 pe-3"><span className="rounded-md border border-gold/30 bg-gold-soft px-2 py-0.5 font-mono text-xs font-semibold text-gold" style={{ fontFamily: "var(--font-jetbrains-mono)" }}>{r.code}</span></td>
-                          <td className="py-3 px-3 text-muted-foreground">{t(r.meaningKey)}</td>
-                          <td className="py-3 ps-3 text-foreground/90">{t(r.actionKey)}</td>
+                      {ERROR_CODES.map((code) => (
+                        <tr key={code} className="border-b border-border/60 align-top">
+                          <td className="py-3 pe-3"><span className="rounded-md border border-gold/30 bg-gold-soft px-2 py-0.5 font-mono text-xs font-semibold text-gold" style={{ fontFamily: "var(--font-jetbrains-mono)" }}>{code}</span></td>
+                          <td className="py-3 px-3 font-mono text-xs text-muted-foreground" style={{ fontFamily: "var(--font-jetbrains-mono)" }}>{t(`docs.errors.row.${code}.http`)}</td>
+                          <td className="py-3 px-3 text-muted-foreground">{t(`docs.errors.row.${code}.meaning`)}</td>
+                          <td className="py-3 ps-3 text-foreground/90">{t(`docs.errors.row.${code}.action`)}</td>
                         </tr>
                       ))}
                     </tbody>

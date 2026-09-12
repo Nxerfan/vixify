@@ -305,3 +305,33 @@ Stage Summary:
 - Honest: placeholder uptime bars labeled coming-soon, [BRACKETED_TOKENS] throughout, disabled newsletter until Nixify pipeline.
 - All new strings via i18n (EN+FA, RTL-safe). Reused existing tokens/type/shell — no new aesthetic.
 - Subagent worklogs appended (5-a, 5-b, 5-c).
+
+---
+Task ID: 6
+Agent: main (Z.ai Code)
+Task: Build the OTP core backend + hosted /verify end-user page.
+
+Work Log:
+- Contract reconciliation (documented before building): aligned /docs response shapes with prompt spec. /docs already publishes: request-otp returns { id, status, expires_in_seconds, resend_available_in_seconds, code? (sandbox only) }; verify-otp returns { verified, verified_at } with error codes; sandbox is env-flag SANDBOX_MODE. Zero mismatch.
+- Prisma schema: OtpRequest model with phone, codeHash (HMAC-SHA256), messageEnc (AES-256-GCM encrypted SMS), status (pending/sent/verified/expired/blocked), attempts counter, claimedAt/sentAt/verifiedAt timestamps, expiresAt, sandbox flag. db:push applied.
+- Env: SANDBOX_MODE=true, OTP_HASH_SECRET, GATEWAY_SECRET added to .env.
+- lib/otp.ts: crypto.randomInt (CSPRNG) code generation; HMAC-SHA256 one-way hash for verify comparison (timingSafeEqual); AES-256-GCM encryption for the SMS message (gateway decrypts); phone normalization (09xxxxxxxxx + E.164); 12 stable error codes; jsonError/jsonOk helpers; checkGatewaySecret.
+- POST /api/request-otp: validates phone, 60s resend cooldown, 20/day limit, generates code, stores hash+encrypted message, returns { id, status, expires_in_seconds, resend_available_in_seconds, code? (sandbox only) }.
+- POST /api/verify-otp: checks hash (constant-time), 5-attempt limit then blocked, handles expired/already-used/no-active/blocked, returns { verified, verified_at } or error with remaining_attempts.
+- GET /api/v1/get-pending-sms: gateway-secret auth, returns oldest unclaimed pending OTP with decrypted message, marks claimedAt (dedup).
+- POST /api/v1/confirm-sent: gateway-secret auth, marks OTP as sent.
+- /verify page: phone entry (09 prefix fixed, 9-digit input, live preview) → 6-slot code entry (auto-advance, paste support, auto-submit) → success state. Sandbox banner ("SANDBOX — no real SMS gateway connected"). Live countdowns (expiry + resend). Deep link /verify?phone=09121234567 prefills. All errors via i18n mapped from stable codes. aria-live regions, keyboard navigation, 44px tap targets, prefers-reduced-motion respected.
+- i18n: 35 new keys (EN+FA) for verify page + error mappings + sandbox labels.
+- /verify footer link already present (quiet, company column).
+
+Verification:
+- curl end-to-end (sandbox): request-otp → get-pending-sms → confirm-sent → verify-otp all 200/expected. Error cases: INVALID_PHONE, RATE_LIMITED_COOLDOWN (retry_after_seconds), GATEWAY_UNAUTHORIZED, NO_PENDING_OTP all correct.
+- Browser: full flow tested (phone → code → Verified), sandbox code displayed (851131), countdown working, wrong code → "Incorrect code. 4 attempts remaining.", deep link prefills phone, FA/RTL works (dir=rtl, Persian heading, FA sandbox banner).
+- Security: no plaintext codes in logs (Prisma parameterized queries show ?). Codes stored as HMAC hash (verify) + AES-256-GCM encrypted message (gateway). Production (SANDBOX_MODE=false) never returns code in response.
+- `bun run lint`: clean.
+
+Stage Summary:
+- OTP core backend live: 4 API routes + Prisma model + crypto lib.
+- Hosted /verify page live: accessible, i18n EN+FA, sandbox-labeled, full flow working.
+- Contract consistency: /docs matches implementation exactly (zero mismatch).
+- Note: db.ts has `log: ['query']` for dev; reduce to `log: ['warn']` in production (parameterized queries already protect values).

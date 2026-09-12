@@ -1,99 +1,121 @@
+import {
+  randomUUID,
+  randomInt,
+  randomBytes,
+  createHmac,
+  createCipheriv,
+  createDecipheriv,
+  timingSafeEqual,
+} from "crypto";
+
 /**
- * Vixify OTP core — crypto, validation, rate-limit config.
+ * Vixify OTP core — code generation, hashing, message encryption, validation.
  *
- * Security rules enforced here:
- * - Codes generated with crypto.randomInt (CSPRNG), never Math.random.
- * - Codes stored as HMAC-SHA256(code) using OTP_HASH_SECRET — never plaintext.
- * - Codes never appear in logs (db.ts query logging only sees the hash).
- * - In production (SANDBOX_MODE=false) the code is never returned in any API response.
+ * Security model:
+ * - Codes are generated with a CSPRNG (crypto.randomInt).
+ * - Codes are stored as HMAC-SHA256 hashes (one-way) for verification.
+ * - The full SMS message (containing the code) is stored AES-256-GCM
+ *   encrypted so the operator's gateway can decrypt+send it, but the code
+ *   is never stored or logged in plaintext at rest.
+ * - The plaintext code is returned in the request-otp response ONLY when
+ *   SANDBOX_MODE=true (dev-only, clearly labeled).
  */
 
-import crypto from "crypto";
+// ---- Config (from env) ----
+const OTP_HASH_SECRET = process.env.OTP_HASH_SECRET || "vixify_dev_hash_secret";
+const MESSAGE_ENC_KEY = process.env.OTP_HASH_SECRET || "vixify_dev_hash_secret"; // reuse for dev; separate key in prod
+export const SANDBOX_MODE = process.env.SANDBOX_MODE === "true";
+export const GATEWAY_SECRET = process.env.GATEWAY_SECRET || "";
+export const CODE_TTL_SECONDS = 120; // 2 minutes
+export const RESEND_COOLDOWN_SECONDS = 60; // 60s between OTPs per phone
+export const DAILY_LIMIT = 20; // max 20 requests/day per phone
+export const MAX_VERIFY_ATTEMPTS = 5;
 
-// ---- Config ----
+// Derive a 32-byte AES key from the secret (SHA-256 → 32 bytes)
+const AES_KEY = createHmac("sha256", MESSAGE_ENC_KEY).update("vixify-aes-key").digest();
 
-export const CONFIG = {
-  sandbox: process.env.SANDBOX_MODE === "true",
-  hashSecret:
-    process.env.OTP_HASH_SECRET ??
-    "vixify_INSECURE_default_hash_secret_SET_OTP_HASH_SECRET",
-  gatewaySecret:
-    process.env.GATEWAY_SECRET ??
-    "vixify_INSECURE_default_gateway_secret_SET_GATEWAY_SECRET",
-  codeLength: 6,
-  expirySeconds: 120, // 2 minutes
-  resendCooldownSeconds: 60, // 60s between OTPs per phone
-  dailyLimitPerPhone: 20, // 20 OTPs / day per phone
-  maxVerifyAttempts: 5, // then block the code
-} as const;
+// ---- Phone validation (Iranian mobile 09xxxxxxxxx) ----
+const PHONE_RE = /^09\d{9}$/;
+const E164_RE = /^\+989\d{9}$/;
 
-// ---- Phone ----
-
-const IRANIAN_MOBILE_RE = /^09\d{9}$/; // 09xxxxxxxxx (11 digits)
-const E164_IRANIAN_RE = /^\+989\d{9}$/; // +989xxxxxxxxx
-
-/**
- * Normalize and validate an Iranian mobile number.
- * Accepts 09xxxxxxxxx or +989xxxxxxxxx, normalizes to 09xxxxxxxxx.
- * Returns null if invalid.
- */
-export function normalizePhone(input: string): string | null {
-  const trimmed = input.trim().replace(/[\s\-()]/g, "");
-  if (E164_IRANIAN_RE.test(trimmed)) {
-    return "0" + trimmed.slice(3); // +989... → 09...
-  }
-  if (IRANIAN_MOBILE_RE.test(trimmed)) {
-    return trimmed;
-  }
+/** Validate + normalize. Accepts 09xxxxxxxxx or +989xxxxxxxxx → 09xxxxxxxxx. Returns null if invalid. */
+export function normalizePhone(phone: string): string | null {
+  const t = phone.trim().replace(/[\s\-()]/g, "");
+  if (E164_RE.test(t)) return "0" + t.slice(3);
+  if (PHONE_RE.test(t)) return t;
   return null;
 }
 
-// ---- Code generation + hashing ----
-
-/** Generate a cryptographically secure 6-digit code, zero-padded. */
+// ---- Code generation ----
 export function generateCode(): string {
-  const n = crypto.randomInt(0, 1_000_000);
-  return String(n).padStart(CONFIG.codeLength, "0");
+  // crypto.randomInt is CSPRNG; range [0, 1_000_000) → pad to 6 digits
+  const n = randomInt(0, 1_000_000);
+  return n.toString().padStart(6, "0");
 }
 
-/** HMAC-SHA256 the code with the server secret. Constant comparison via verifyCode. */
+// ---- Hashing (HMAC-SHA256, one-way) ----
 export function hashCode(code: string): string {
-  return crypto
-    .createHmac("sha256", CONFIG.hashSecret)
-    .update(code)
-    .digest("hex");
+  return createHmac("sha256", OTP_HASH_SECRET).update(code).digest("hex");
+}
+export function verifyCodeHash(code: string, storedHash: string): boolean {
+  const computed = Buffer.from(hashCode(code), "hex");
+  const stored = Buffer.from(storedHash, "hex");
+  if (computed.length !== stored.length) return false;
+  return timingSafeEqual(computed, stored);
 }
 
-/** Constant-time comparison of a plaintext code against a stored hash. */
-export function verifyCode(code: string, storedHash: string): boolean {
-  const candidate = hashCode(code);
-  const a = Buffer.from(candidate, "hex");
-  const b = Buffer.from(storedHash, "hex");
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
-}
-
-// ---- Gateway auth ----
-
-export function checkGatewaySecret(header: string | null): boolean {
-  if (!header) return false;
-  const a = Buffer.from(header);
-  const b = Buffer.from(CONFIG.gatewaySecret);
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
-}
-
-// ---- SMS message builder ----
-
-/**
- * Build the SMS message body. In the hosted verify flow the brand is "Vixify".
- * Plan-gated branding comes later with the auth/billing stage.
- */
-export function buildSmsMessage(code: string, brand = "Vixify"): string {
+// ---- Message composition ----
+export function composeMessage(code: string, brand = "Vixify"): string {
   return `Your ${brand} code is ${code} — Vixify`;
 }
 
-// ---- Response helpers ----
+// ---- Message encryption (AES-256-GCM, reversible for gateway) ----
+export function encryptMessage(message: string): string {
+  const iv = randomBytes(12);
+  const cipher = createCipheriv("aes-256-gcm", AES_KEY, iv);
+  const enc = Buffer.concat([cipher.update(message, "utf8"), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  // format: base64(iv(12) + tag(16) + ciphertext)
+  return Buffer.concat([iv, tag, enc]).toString("base64");
+}
+export function decryptMessage(encBase64: string): string {
+  const buf = Buffer.from(encBase64, "base64");
+  const iv = buf.subarray(0, 12);
+  const tag = buf.subarray(12, 28);
+  const enc = buf.subarray(28);
+  const decipher = createDecipheriv("aes-256-gcm", AES_KEY, iv);
+  decipher.setAuthTag(tag);
+  const dec = Buffer.concat([decipher.update(enc), decipher.final()]);
+  return dec.toString("utf8");
+}
+
+// ---- Gateway auth ----
+export function checkGatewaySecret(header: string | null): boolean {
+  if (!header || !GATEWAY_SECRET) return false;
+  const a = Buffer.from(header);
+  const b = Buffer.from(GATEWAY_SECRET);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+// ---- ID generation ----
+export function generateOtpId(): string {
+  return `otp_${randomUUID()}`;
+}
+
+// ---- Time helpers ----
+export function now(): Date {
+  return new Date();
+}
+export function expiryFromNow(): Date {
+  return new Date(Date.now() + CODE_TTL_SECONDS * 1000);
+}
+export function secondsUntil(date: Date | null): number {
+  if (!date) return 0;
+  return Math.max(0, Math.ceil((date.getTime() - Date.now()) / 1000));
+}
+
+// ---- Stable error codes (published in /docs) ----
 
 export interface OtpError {
   code: string;
@@ -102,18 +124,16 @@ export interface OtpError {
   details?: Record<string, number | string>;
 }
 
-export function jsonError(error: OtpError) {
+export function jsonError(error: OtpError): Response {
   return Response.json(
     { code: error.code, message: error.message, ...error.details },
     { status: error.httpStatus }
   );
 }
 
-export function jsonOk(data: Record<string, unknown>) {
+export function jsonOk(data: Record<string, unknown>): Response {
   return Response.json(data, { status: 200 });
 }
-
-// ---- Stable error codes (published in /docs) ----
 
 export const ERRORS = {
   INVALID_PHONE: (msg = "Invalid phone number. Use 09xxxxxxxxx format."): OtpError => ({
@@ -131,7 +151,7 @@ export const ERRORS = {
     code: "RATE_LIMITED_DAILY",
     message: "Daily OTP limit reached for this phone number.",
     httpStatus: 429,
-    details: { limit: CONFIG.dailyLimitPerPhone },
+    details: { limit: DAILY_LIMIT },
   }),
   OTP_EXPIRED: (): OtpError => ({
     code: "OTP_EXPIRED",

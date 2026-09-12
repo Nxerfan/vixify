@@ -41,6 +41,7 @@ const COLUMNS = [
       { labelKey: "footer.company.about", href: "/about" },
       { labelKey: "footer.company.contact", href: "/contact" },
       { labelKey: "footer.company.blog", href: "/blog" },
+      { labelKey: "verify.page.kicker", href: "/verify" },
     ],
   },
   {
