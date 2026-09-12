@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Vixify Prisma schema
+// SQLite in sandbox; schema is Postgres-compatible for Supabase migration.
 
 generator client {
   provider = "prisma-client-js"
@@ -29,4 +26,31 @@ model Post {
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// Core OTP request record. Codes are stored as HMAC-SHA256 hashes —
+/// never plaintext. One row per /api/request-otp call.
+model OtpRequest {
+  id          String    @id @default(cuid())
+  /// Normalized Iranian mobile: 09xxxxxxxxx (11 digits)
+  phone       String
+  /// HMAC-SHA256(code) using OTP_HASH_SECRET — never the raw code
+  codeHash    String
+  /// pending | sent | verified | expired | blocked
+  status      String    @default("pending")
+  /// Wrong-verify attempt counter
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  /// Set when the gateway picks up this OTP (dedup so it's never handed out twice)
+  claimedAt   DateTime?
+  /// Set when /api/v1/confirm-sent is called
+  sentAt      DateTime?
+  /// Set on successful verify
+  verifiedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  /// 2 minutes after createdAt
+  expiresAt   DateTime
+
+  @@index([phone, createdAt])
+  @@index([status, claimedAt])
 }
